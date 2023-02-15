@@ -21,6 +21,11 @@ import { AuthModule } from './modules/auth/auth.module';
       database: process.env.TYPEORM_DATABASE,
       entities: [process.env.TYPEORM_ENTITIES],
       synchronize: false,
+      // extra: {
+      //   ssl: {
+      //     rejectUnauthorized: false
+      //   }
+      // }
     }),
     AuthModule,
     TasksModule,

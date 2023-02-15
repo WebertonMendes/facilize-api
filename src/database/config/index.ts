@@ -16,4 +16,9 @@ export default new DataSource({
   entities: [configService.get('TYPEORM_ENTITIES')],
   migrations: [configService.get('TYPEORM_MIGRATIONS')],
   synchronize: false,
+  // extra: {
+  //   ssl: {
+  //     rejectUnauthorized: false
+  //   }
+  // }
 });
