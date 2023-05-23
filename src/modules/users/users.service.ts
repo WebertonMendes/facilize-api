@@ -65,7 +65,7 @@ export class UsersService {
       where: { id },
     });
 
-    if (!user) throw new HttpException(`User not found!`, HttpStatus.ACCEPTED);
+    if (!user) throw new HttpException(`User not found!`, HttpStatus.NOT_FOUND);
 
     return user;
   }
@@ -94,7 +94,7 @@ export class UsersService {
       where: { id },
     });
 
-    if (!user) throw new HttpException(`User not found!`, HttpStatus.ACCEPTED);
+    if (!user) throw new HttpException(`User not found!`, HttpStatus.NOT_FOUND);
 
     if (updateUserData.password)
       updateUserData.password = await hash(updateUserData.password, 8);
@@ -114,7 +114,7 @@ export class UsersService {
       where: { id },
     });
 
-    if (!user) throw new HttpException(`User not found!`, HttpStatus.ACCEPTED);
+    if (!user) throw new HttpException(`User not found!`, HttpStatus.NOT_FOUND);
 
     try {
       await this.usersRepository.delete(id);

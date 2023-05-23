@@ -84,7 +84,7 @@ export class TasksService {
       where: { id, user_id: userId },
     });
 
-    if (!task) throw new HttpException(`Task not found!`, HttpStatus.ACCEPTED);
+    if (!task) throw new HttpException(`Task not found!`, HttpStatus.NOT_FOUND);
 
     return task;
   }
@@ -98,7 +98,7 @@ export class TasksService {
       where: { id, user_id: userId },
     });
 
-    if (!task) throw new HttpException(`Task not found!`, HttpStatus.ACCEPTED);
+    if (!task) throw new HttpException(`Task not found!`, HttpStatus.NOT_FOUND);
 
     try {
       await this.taskRepository.update(id, updateTaskData);
@@ -119,7 +119,7 @@ export class TasksService {
       where: { id, user_id: userId },
     });
 
-    if (!task) throw new HttpException(`Task not found!`, HttpStatus.ACCEPTED);
+    if (!task) throw new HttpException(`Task not found!`, HttpStatus.NOT_FOUND);
 
     try {
       await this.taskRepository.delete(id);
