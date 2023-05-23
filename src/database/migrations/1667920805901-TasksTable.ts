@@ -24,17 +24,18 @@ export class TasksTable1667920805901 implements MigrationInterface {
             {
               name: 'attachment',
               type: 'boolean',
-              default: 'false',
+              default: false,
             },
             {
               name: 'category_id',
               type: 'numeric',
               isNullable: true,
+              default: null,
             },
             {
               name: 'is_finished',
               type: 'boolean',
-              default: 'false',
+              default: false,
             },
             {
               name: 'created_at',
