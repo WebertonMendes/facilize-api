@@ -25,13 +25,13 @@ export class Task {
   @Column()
   user_id: string;
 
-  @Column()
+  @Column({ type: 'boolean', default: false })
   attachment?: boolean;
 
-  @Column()
+  @Column({ type: 'numeric', default: null })
   category_id?: number;
 
-  @Column()
+  @Column({ type: 'boolean', default: false })
   is_finished?: boolean;
 
   @CreateDateColumn()
