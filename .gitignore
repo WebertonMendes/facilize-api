@@ -4,3 +4,9 @@
 
 # Restrict Data
 .env
+
+# Storaged Files
+src/storage
+
+# Database Sqlite
+src/database/sqlite/db
