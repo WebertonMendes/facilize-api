@@ -9,6 +9,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { UsersService } from '../users/users.service';
 import { deleteFile } from 'src/utils/upload.utils';
+import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class TasksService {
@@ -50,29 +51,39 @@ export class TasksService {
     }
   }
 
-  async findAll(finished?: boolean, tokenString?: string) {
+  async findAll(
+    options: IPaginationOptions,
+    finished?: string,
+    tokenString?: string
+  ): Promise<Pagination<Task>> {
     const token = tokenString.replace('Bearer ', '');
     const user = this.jwtService.decode(token);
     const userId = user.sub;
 
-    if (finished) {
-      return await this.taskRepository.find({
-        where: {
-          is_finished: finished,
-          user_id: userId,
-        },
-      });
-    } else {
-      return await this.taskRepository.find({
-        where: {
-          user_id: userId,
-        },
-        order: {
-          is_finished: 'ASC',
-          created_at: 'DESC',
-        },
-      });
-    }
+    const queryBuilder = this.taskRepository.createQueryBuilder('t');
+
+    queryBuilder.select([
+      't.id',
+      't.description',
+      't.user_id',
+      't.attachment',
+      't.category_id',
+      't.is_finished',
+      't.created_at',
+      't.updated_at',
+    ]);
+
+    queryBuilder.where({
+      is_finished: finished === 'true' ? true : false,
+      user_id: userId,
+    })
+
+    queryBuilder.orderBy('t.is_finished', 'ASC');
+    queryBuilder.addOrderBy('t.created_at', 'DESC');
+
+    options.limit = Number(options.limit) > 50 ? 50 : options.limit;
+
+    return paginate<Task>(queryBuilder, options);
   }
 
   async findOne(id: string, tokenString: string) {

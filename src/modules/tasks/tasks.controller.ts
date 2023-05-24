@@ -17,13 +17,15 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Pagination } from 'nestjs-typeorm-paginate';
 
 import { JwtAuthGuard } from '../auth/shared/jwt/jwt-auth.guard';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { editFileName, imageFileFilter } from 'src/utils/upload.utils';
+import { Task } from './entities/task.entity';
 
 @ApiTags('Tasks')
 @Controller('tasks')
@@ -47,9 +49,11 @@ export class TasksController {
   @Get()
   findAll(
     @Headers('Authorization') tokenString: string,
-    @Query('finished') finished?: boolean,
-  ) {
-    return this.tasksService.findAll(finished, tokenString);
+    @Query('page') page = 1,
+    @Query('limit') limit = 50,
+    @Query('finished') finished?: string,
+  ): Promise<Pagination<Task>> {
+    return this.tasksService.findAll({ page, limit }, finished, tokenString);
   }
 
   @ApiBearerAuth()
