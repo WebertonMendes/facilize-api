@@ -59,6 +59,7 @@ export class TasksService {
     const token = tokenString.replace('Bearer ', '');
     const user = this.jwtService.decode(token);
     const userId = user.sub;
+    const isFinished = finished === 'true' ? true : finished === 'false' ? false : null;
 
     const queryBuilder = this.taskRepository.createQueryBuilder('t');
 
@@ -73,11 +74,10 @@ export class TasksService {
       't.updated_at',
     ]);
 
-    queryBuilder.where({
-      is_finished: finished === 'true' ? true : false,
-      user_id: userId,
-    })
+    if (isFinished !== null)
+      queryBuilder.where({ is_finished: isFinished })
 
+    queryBuilder.andWhere({ user_id: userId })
     queryBuilder.orderBy('t.is_finished', 'ASC');
     queryBuilder.addOrderBy('t.created_at', 'DESC');
 
