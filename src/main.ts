@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
 
   app.enableCors({
-    origin: true,
+    origin: process.env.DOMAIN_URL,
     methods: ['GET','HEAD','POST','PATCH','DELETE','OPTIONS'],
     credentials: true,
   });
