@@ -9,10 +9,10 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
 
-  app.enableCors({
-    origin: [process.env.DOMAIN_URL],
-    methods: ['POST', 'PATCH', 'DELETE', 'GET']
-  });
+  // app.enableCors({
+  //   origin: [process.env.DOMAIN_URL],
+  //   methods: ['POST', 'PATCH', 'DELETE', 'GET']
+  // });
 
   const swaggerOptions = new DocumentBuilder()
     .setTitle('To-Do List API')
