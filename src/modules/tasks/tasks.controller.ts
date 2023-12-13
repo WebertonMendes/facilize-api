@@ -94,7 +94,7 @@ export class TasksController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './src/storage',
+        destination: './tmp',
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
