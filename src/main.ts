@@ -5,14 +5,14 @@ import { AppModule } from './app.module';
 import { EntityNotFoundExceptionFilter } from './errors/entity-not-found.exception';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   app.setGlobalPrefix('api/v1');
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
 
-  // app.enableCors({
-  //   origin: [process.env.DOMAIN_URL],
-  //   methods: ['POST', 'PATCH', 'DELETE', 'GET']
-  // });
+  app.enableCors({
+    origin: [process.env.DOMAIN_URL],
+    methods: ['POST', 'PATCH', 'DELETE', 'GET']
+  });
 
   const swaggerOptions = new DocumentBuilder()
     .setTitle('To-Do List API')
