@@ -5,12 +5,12 @@ import { AppModule } from './app.module';
 import { EntityNotFoundExceptionFilter } from './errors/entity-not-found.exception';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api/v1');
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
 
   app.enableCors({
-    origin: [process.env.DOMAIN_URL],
+    origin: ['http://localhost:3000', 'https://todo-list-ui-webertonmendes.vercel.app'],
     allowedHeaders: ['Accept', 'Content-Type'],
     methods: ['POST', 'PATCH', 'DELETE', 'GET'],
     preflightContinue: false,
@@ -33,5 +33,7 @@ async function bootstrap() {
 
   console.log(`🚀 API: http://localhost:${applicationPort}/api/v1/`);
   console.log(`📝 DOC: http://localhost:${applicationPort}/api/v1/docs`);
+  console.log(`📝 APP: ${process.env.DOMAIN_URL}`);
+
 }
 bootstrap();
