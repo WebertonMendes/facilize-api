@@ -10,11 +10,9 @@ async function bootstrap() {
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
 
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://todo-list-ui-webertonmendes.vercel.app'],
-    allowedHeaders: ['Accept', 'Content-Type'],
-    methods: ['POST', 'PATCH', 'DELETE', 'GET'],
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
+    origin: true,
+    methods: ['GET','HEAD','POST','PATCH','DELETE','OPTIONS'],
+    credentials: true,
   });
 
   const swaggerOptions = new DocumentBuilder()
@@ -33,7 +31,5 @@ async function bootstrap() {
 
   console.log(`🚀 API: http://localhost:${applicationPort}/api/v1/`);
   console.log(`📝 DOC: http://localhost:${applicationPort}/api/v1/docs`);
-  console.log(`📝 APP: ${process.env.DOMAIN_URL}`);
-
 }
 bootstrap();
