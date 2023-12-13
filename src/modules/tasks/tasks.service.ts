@@ -136,7 +136,7 @@ export class TasksService {
       await this.taskRepository.delete(id);
 
       if (task.attachment) {
-        const dirStorage = path.resolve('.', 'src/storage');
+        const dirStorage = path.resolve('.', '/tmp');
         const filename = `${dirStorage}/${task.id}.pdf`
         await deleteFile(filename);
       }

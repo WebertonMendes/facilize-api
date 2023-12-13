@@ -94,7 +94,7 @@ export class TasksController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './tmp',
+        destination: '/tmp',
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
@@ -112,6 +112,6 @@ export class TasksController {
 
   @Get('/download/:taskId')
   downloadFile(@Param('taskId') file: Express.Multer.File, @Res() res) {
-    return res.sendFile(`${file}.pdf`, { root: './src/storage' });
+    return res.sendFile(`${file}.pdf`, { root: '/tmp' });
   }
 }

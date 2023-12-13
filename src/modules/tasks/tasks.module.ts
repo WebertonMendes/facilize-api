@@ -14,7 +14,7 @@ import { UsersModule } from '../users/users.module';
     UsersModule,
     TypeOrmModule.forFeature([Task]),
     MulterModule.register({
-      dest: './tmp',
+      dest: '/tmp',
     }),
   ],
   controllers: [TasksController],
