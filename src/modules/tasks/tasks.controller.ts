@@ -24,7 +24,7 @@ import { JwtAuthGuard } from '../auth/shared/jwt/jwt-auth.guard';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { editFileName, imageFileFilter } from 'src/utils/upload.utils';
+import { editFileName, imageFileFilter } from '../../utils/upload.utils';
 import { Task } from './entities/task.entity';
 
 @ApiTags('Tasks')
