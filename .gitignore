@@ -5,8 +5,8 @@
 # Restrict Data
 .env
 
-# Storaged Files
-src/storage
+# Storaged Files Local
+/tmp
 
 # Database Sqlite
 src/database/sqlite/db

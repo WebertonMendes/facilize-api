@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { MulterModule } from '@nestjs/platform-express';
+import { Module } from "@nestjs/common";
+import { JwtModule } from "@nestjs/jwt";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { MulterModule } from "@nestjs/platform-express";
 
-import { Task } from './entities/task.entity';
-import { TasksService } from './tasks.service';
-import { TasksController } from './tasks.controller';
-import { UsersModule } from '../users/users.module';
+import { Task } from "./entities/task.entity";
+import { TasksService } from "./tasks.service";
+import { TasksController } from "./tasks.controller";
+import { UsersModule } from "../users/users.module";
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { UsersModule } from '../users/users.module';
     UsersModule,
     TypeOrmModule.forFeature([Task]),
     MulterModule.register({
-      dest: '/tmp',
+      dest: process.env.NODE_ENV === "development" ? "../../../tmp" : "/tmp",
     }),
   ],
   controllers: [TasksController],

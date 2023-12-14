@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigModule } from "@nestjs/config";
 
-import { TasksModule } from './modules/tasks/tasks.module';
-import { UsersModule } from './modules/users/users.module';
-import { AuthModule } from './modules/auth/auth.module';
+import { TasksModule } from "./modules/tasks/tasks.module";
+import { UsersModule } from "./modules/users/users.module";
+import { AuthModule } from "./modules/auth/auth.module";
 
 @Module({
   imports: [
@@ -12,9 +12,12 @@ import { AuthModule } from './modules/auth/auth.module';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: '/tmp/sqlite/db',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      type: "sqlite",
+      database:
+        process.env.NODE_ENV === "development"
+          ? "./database/sqlite/db"
+          : "/tmp/sqlite/db",
+      entities: [__dirname + "/**/*.entity{.ts,.js}"],
       synchronize: true,
     }),
     AuthModule,

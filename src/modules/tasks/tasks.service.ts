@@ -1,15 +1,19 @@
-import * as path from 'path';
-import { Repository } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import * as path from "path";
+import { Repository } from "typeorm";
+import { JwtService } from "@nestjs/jwt";
+import { InjectRepository } from "@nestjs/typeorm";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 
-import { Task } from './entities/task.entity';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
-import { UsersService } from '../users/users.service';
-import { deleteFile } from '../../utils/upload.utils';
-import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
+import { Task } from "./entities/task.entity";
+import { CreateTaskDto } from "./dto/create-task.dto";
+import { UpdateTaskDto } from "./dto/update-task.dto";
+import { UsersService } from "../users/users.service";
+import { deleteFile } from "../../utils/upload.utils";
+import {
+  IPaginationOptions,
+  Pagination,
+  paginate,
+} from "nestjs-typeorm-paginate";
 
 @Injectable()
 export class TasksService {
@@ -17,11 +21,11 @@ export class TasksService {
     @InjectRepository(Task)
     private taskRepository: Repository<Task>,
     private jwtService: JwtService,
-    private readonly usersService: UsersService,
+    private readonly usersService: UsersService
   ) {}
 
   async create(createTaskData: CreateTaskDto, tokenString: string) {
-    const token = tokenString.replace('Bearer ', '');
+    const token = tokenString.replace("Bearer ", "");
     const user = this.jwtService.decode(token);
     const userId = user.sub;
 
@@ -46,7 +50,7 @@ export class TasksService {
     } catch (error) {
       throw new HttpException(
         `Error saving task. Error: ${error.message}`,
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
   }
@@ -56,30 +60,30 @@ export class TasksService {
     finished?: string,
     tokenString?: string
   ): Promise<Pagination<Task>> {
-    const token = tokenString.replace('Bearer ', '');
+    const token = tokenString.replace("Bearer ", "");
     const user = this.jwtService.decode(token);
     const userId = user.sub;
-    const isFinished = finished === 'true' ? true : finished === 'false' ? false : null;
+    const isFinished =
+      finished === "true" ? true : finished === "false" ? false : null;
 
-    const queryBuilder = this.taskRepository.createQueryBuilder('t');
+    const queryBuilder = this.taskRepository.createQueryBuilder("t");
 
     queryBuilder.select([
-      't.id',
-      't.description',
-      't.user_id',
-      't.attachment',
-      't.category_id',
-      't.is_finished',
-      't.created_at',
-      't.updated_at',
+      "t.id",
+      "t.description",
+      "t.user_id",
+      "t.attachment",
+      "t.category_id",
+      "t.is_finished",
+      "t.created_at",
+      "t.updated_at",
     ]);
 
-    if (isFinished !== null)
-      queryBuilder.where({ is_finished: isFinished })
+    if (isFinished !== null) queryBuilder.where({ is_finished: isFinished });
 
-    queryBuilder.andWhere({ user_id: userId })
-    queryBuilder.orderBy('t.is_finished', 'ASC');
-    queryBuilder.addOrderBy('t.created_at', 'DESC');
+    queryBuilder.andWhere({ user_id: userId });
+    queryBuilder.orderBy("t.is_finished", "ASC");
+    queryBuilder.addOrderBy("t.created_at", "DESC");
 
     options.limit = Number(options.limit) > 50 ? 50 : options.limit;
 
@@ -87,7 +91,7 @@ export class TasksService {
   }
 
   async findOne(id: string, tokenString: string) {
-    const token = tokenString.replace('Bearer ', '');
+    const token = tokenString.replace("Bearer ", "");
     const user = this.jwtService.decode(token);
     const userId = user.sub;
 
@@ -101,7 +105,7 @@ export class TasksService {
   }
 
   async update(id: string, updateTaskData: UpdateTaskDto, tokenString: string) {
-    const token = tokenString.replace('Bearer ', '');
+    const token = tokenString.replace("Bearer ", "");
     const user = this.jwtService.decode(token);
     const userId = user.sub;
 
@@ -116,13 +120,13 @@ export class TasksService {
     } catch (error) {
       throw new HttpException(
         `Error updating task. Error: '${error.message}'.`,
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
   }
 
   async remove(id: string, tokenString: string) {
-    const token = tokenString.replace('Bearer ', '');
+    const token = tokenString.replace("Bearer ", "");
     const user = this.jwtService.decode(token);
     const userId = user.sub;
 
@@ -136,14 +140,16 @@ export class TasksService {
       await this.taskRepository.delete(id);
 
       if (task.attachment) {
-        const dirStorage = path.resolve('.', '/tmp');
-        const filename = `${dirStorage}/${task.id}.pdf`
+        const tempDirectory =
+          process.env.NODE_ENV === "development" ? "../../../tmp" : "/tmp";
+        const dirStorage = path.resolve(".", tempDirectory);
+        const filename = `${dirStorage}/${task.id}.pdf`;
         await deleteFile(filename);
       }
     } catch (error) {
       throw new HttpException(
         `Error removing task. Error: '${error.message}'.`,
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
   }
