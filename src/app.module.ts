@@ -1,10 +1,12 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
+import { ServeStaticModule } from "@nestjs/serve-static";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { join } from "path";
 
+import { AuthModule } from "./modules/auth/auth.module";
 import { TasksModule } from "./modules/tasks/tasks.module";
 import { UsersModule } from "./modules/users/users.module";
-import { AuthModule } from "./modules/auth/auth.module";
 
 @Module({
   imports: [
@@ -19,6 +21,10 @@ import { AuthModule } from "./modules/auth/auth.module";
           : "/tmp/sqlite/db",
       entities: [__dirname + "/**/*.entity{.ts,.js}"],
       synchronize: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "..", "docs"),
+      serveRoot: process.env.NODE_ENV === "development" ? "/" : "/public",
     }),
     AuthModule,
     TasksModule,
