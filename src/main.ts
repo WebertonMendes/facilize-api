@@ -3,7 +3,6 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 import { AppModule } from "./app.module";
 import { EntityNotFoundExceptionFilter } from "./errors/entity-not-found.exception";
-import { swaggerStatic } from "./utils/swagger-static.utils";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -24,12 +23,14 @@ async function bootstrap() {
     .build();
 
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions);
-  SwaggerModule.setup("api/v1/docs", app, swaggerDocument);
+  SwaggerModule.setup("api/v1/docs", app, swaggerDocument, {
+    customCssUrl: process.env.SWAGGER_CSS_CDN,
+    customJs: [process.env.SWAGGER_BUNDLE_CDN, process.env.SWAGGER_PRESET_CDN],
+  });
 
   const applicationPort = process.env.APP_PORT || process.env.PORT || 3333;
 
   await app.listen(applicationPort);
-  swaggerStatic();
 
   console.log(`🚀 API: http://localhost:${applicationPort}/api/v1/`);
   console.log(`📝 DOC: http://localhost:${applicationPort}/api/v1/docs`);

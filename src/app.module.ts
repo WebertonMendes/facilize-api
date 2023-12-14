@@ -1,8 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { ServeStaticModule } from "@nestjs/serve-static";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { join } from "path";
 
 import { AuthModule } from "./modules/auth/auth.module";
 import { TasksModule } from "./modules/tasks/tasks.module";
@@ -21,10 +19,6 @@ import { UsersModule } from "./modules/users/users.module";
           : "/tmp/sqlite/db",
       entities: [__dirname + "/**/*.entity{.ts,.js}"],
       synchronize: true,
-    }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, "..", "docs"),
-      serveRoot: "/docs",
     }),
     AuthModule,
     TasksModule,
