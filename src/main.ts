@@ -3,6 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
 import { EntityNotFoundExceptionFilter } from './errors/entity-not-found.exception';
+import { swaggerStatic } from './utils/swagger-static.utils';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,11 +20,11 @@ async function bootstrap() {
     .setTitle('To-Do List API')
     .setDescription('API Documentation "To-Do List"')
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
     .build();
 
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions);
-  SwaggerModule.setup('api/v1/docs', app, swaggerDocument);
+  SwaggerModule.setup('api/v1/docs', app, swaggerDocument, { ...swaggerStatic });
 
   const applicationPort = process.env.APP_PORT || process.env.PORT || 3333;
 
