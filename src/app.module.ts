@@ -24,7 +24,7 @@ import { UsersModule } from "./modules/users/users.module";
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "docs"),
-      serveRoot: process.env.NODE_ENV === "development" ? "/" : "/public",
+      serveRoot: "/docs",
     }),
     AuthModule,
     TasksModule,
