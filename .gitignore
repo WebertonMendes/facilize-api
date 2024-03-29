@@ -7,6 +7,3 @@
 
 # Storaged Files Local
 /tmp
-
-# Database Sqlite
-src/database/sqlite/db

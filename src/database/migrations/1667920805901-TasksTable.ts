@@ -9,9 +9,9 @@ export class TasksTable1667920805901 implements MigrationInterface {
           columns: [
             {
               name: 'id',
-              type: 'uuid',
+              type: 'varchar',
               isPrimary: true,
-              default: `uuid_generate_v4()`,
+              generationStrategy: 'uuid',
             },
             {
               name: 'description',
@@ -19,7 +19,7 @@ export class TasksTable1667920805901 implements MigrationInterface {
             },
             {
               name: 'user_id',
-              type: 'uuid',
+              type: 'varchar',
             },
             {
               name: 'attachment',
