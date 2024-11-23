@@ -87,7 +87,10 @@ export class TasksService {
 
     options.limit = Number(options.limit) > 50 ? 50 : options.limit;
 
-    return paginate<Task>(queryBuilder, options);
+    const tasks = await paginate<Task>(queryBuilder, options);
+    const countTasks = await this.countByStatus(userId);
+
+    return {...tasks, ...countTasks};
   }
 
   async findOne(id: string, tokenString: string) {
@@ -102,6 +105,17 @@ export class TasksService {
     if (!task) throw new HttpException(`Task not found!`, HttpStatus.NOT_FOUND);
 
     return task;
+  }
+
+  async countByStatus(userId: string) {
+    const finished = await this.taskRepository.count({ where: { is_finished: true, user_id: userId } });
+    const unfinished = await this.taskRepository.count({ where: { is_finished: false, user_id: userId } });
+    return {
+      summary: {
+        finished,
+        unfinished,
+      }
+    };
   }
 
   async update(id: string, updateTaskData: UpdateTaskDto, tokenString: string) {
